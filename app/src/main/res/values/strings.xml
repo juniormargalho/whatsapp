@@ -11,5 +11,7 @@
     <string name="menu_sair">Sair</string>
     <string name="aba_conversas">Conversas</string>
     <string name="aba_contatos">Contatos</string>
+    <string name="toolbar_configuracoes">Configurações</string>
+    <string name="toolbar_whatsapp">WhatsApp</string>
 
 </resources>
