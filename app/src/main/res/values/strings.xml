@@ -9,4 +9,7 @@
     <string name="menu_pesquisar">Pesquisar</string>
     <string name="menu_configuracoes">Configurações</string>
     <string name="menu_sair">Sair</string>
+    <string name="aba_conversas">Conversas</string>
+    <string name="aba_contatos">Contatos</string>
+
 </resources>
