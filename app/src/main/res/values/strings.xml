@@ -13,5 +13,7 @@
     <string name="aba_contatos">Contatos</string>
     <string name="toolbar_configuracoes">Configurações</string>
     <string name="toolbar_whatsapp">WhatsApp</string>
+    <string name="nome_usuario">Nome do usuário</string>
+    <string name="texto_obs_configuracoes">Esse não é o seu nome de usuário nem sua senha. Esse nome ficará visível para seus contatos do WhatsApp</string>
 
 </resources>
