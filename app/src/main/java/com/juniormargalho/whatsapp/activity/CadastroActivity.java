@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.juniormargalho.whatsapp.R;
 import com.juniormargalho.whatsapp.config.ConfiguracaoFirebase;
+import com.juniormargalho.whatsapp.helper.Base64Custom;
 import com.juniormargalho.whatsapp.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -42,13 +43,11 @@ public class CadastroActivity extends AppCompatActivity {
         if(!textoNome.isEmpty()){
             if(!textoEmail.isEmpty()){
                 if(!textoSenha.isEmpty()){
-
                     Usuario usuario = new Usuario();
                     usuario.setNome(textoNome);
                     usuario.setEmail(textoEmail);
                     usuario.setSenha(textoSenha);
                     cadastrarUsuario(usuario);
-
                 }else {
                     Toast.makeText(CadastroActivity.this,"Preencha a Senha!", Toast.LENGTH_SHORT).show();
                 }
@@ -60,7 +59,7 @@ public class CadastroActivity extends AppCompatActivity {
         }
     }
 
-    public void cadastrarUsuario(Usuario usuario){
+    public void cadastrarUsuario(final Usuario usuario){
         autenticacao = ConfiguracaoFirebase.getFirebaseAuth();
         autenticacao.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -69,6 +68,15 @@ public class CadastroActivity extends AppCompatActivity {
                 if(task.isSuccessful()){
                     Toast.makeText(CadastroActivity.this,"Sucesso ao cadastrar Usuário!", Toast.LENGTH_SHORT).show();
                     finish();
+
+                    try{
+                        String identificadorUsuario = Base64Custom.codificarBase64(usuario.getEmail());
+                        usuario.setId(identificadorUsuario);
+                        usuario.salvar();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }else {
                     String excecao = "";
                     try {
@@ -88,4 +96,5 @@ public class CadastroActivity extends AppCompatActivity {
             }
         });
     }
+
 }
