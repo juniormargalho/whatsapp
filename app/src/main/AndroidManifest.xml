@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.juniormargalho.whatsapp">
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission
-        android:name="android.permission.CAMERA"/>
+    //Define os requisitos que o dispositivo necessita para visualizar o aplicativo na google store
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="true"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:allowBackup="true"
