@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.juniormargalho.whatsapp.R;
 import com.juniormargalho.whatsapp.config.ConfiguracaoFirebase;
 import com.juniormargalho.whatsapp.helper.Base64Custom;
+import com.juniormargalho.whatsapp.helper.UsuarioFirebase;
 import com.juniormargalho.whatsapp.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -30,7 +31,7 @@ public class CadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
-        campoNome = findViewById(R.id.editNome);
+        campoNome = findViewById(R.id.editPerfilNome);
         campoEmail = findViewById(R.id.editLoginEmail);
         campoSenha = findViewById(R.id.editLoginSenha);
     }
@@ -67,6 +68,7 @@ public class CadastroActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(CadastroActivity.this,"Sucesso ao cadastrar Usuário!", Toast.LENGTH_SHORT).show();
+                    UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
                     finish();
 
                     try{

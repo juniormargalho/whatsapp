@@ -15,12 +15,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.juniormargalho.whatsapp.R;
@@ -46,6 +49,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
     private CircleImageView circleImageViewPerfil;
     private StorageReference storageReference;
     private String identificadorUsuario;
+    private EditText editPerfilNome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         imageButtonCamera = findViewById(R.id.imageButtonCamera);
         imageButtonGaleria = findViewById(R.id.imageButtonGaleria);
         circleImageViewPerfil = findViewById(R.id.circleImageViewFotoPerfil);
+        editPerfilNome = findViewById(R.id.editPerfilNome);
 
         //Validar permissoes
         Permissao.validarPermissoes(permissoesNecessarias, this, 1);
@@ -67,6 +72,17 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.toolbar_configuracoes));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Recuperar dados do usuario
+        FirebaseUser usuario = UsuarioFirebase.getUsuarioAtual();
+        Uri url = usuario.getPhotoUrl();
+        if(url != null){
+            Glide.with(ConfiguracoesActivity.this).load(url).into(circleImageViewPerfil);
+        }else {
+            circleImageViewPerfil.setImageResource(R.drawable.padrao);
+        }
+
+        editPerfilNome.setText(usuario.getDisplayName());
 
         imageButtonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,11 +133,12 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                     byte[] dadosImagem = byteArrayOutputStream.toByteArray();
 
                     //Salvar Imagem no Firebase
-                    StorageReference imagemRef = storageReference
+                    final StorageReference imagemRef = storageReference
                             .child("imagens")
                             .child("perfil")
                             .child(identificadorUsuario + ".jpeg");
-                    UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+                    final UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
@@ -131,6 +148,13 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(ConfiguracoesActivity.this,"Sucesso ao fazer upload da imagem!", Toast.LENGTH_SHORT).show();
+
+                            imagemRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    atualizaFotoUsuario(uri);
+                                }
+                            });
                         }
                     });
                 }
@@ -138,6 +162,10 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void atualizaFotoUsuario(Uri url){
+        UsuarioFirebase.atualizarFotoUsuario(url);
     }
 
     @Override

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.juniormargalho.whatsapp">
 
-    //Define os requisitos que o dispositivo necessita para visualizar o aplicativo na google store
+    <!--Define os requisitos que o dispositivo necessita para visualizar o aplicativo na google store-->
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="true"/>
+        android:required="false"/>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
