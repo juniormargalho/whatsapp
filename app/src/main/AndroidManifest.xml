@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.juniormargalho.whatsapp">
-
-    <!--Define os requisitos que o dispositivo necessita para visualizar o aplicativo na google store-->
+    <!-- Define os requisitos que o dispositivo necessita para visualizar o aplicativo na google store -->
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="false"/>
+        android:required="false" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -19,17 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".activity.ChatActivity"
+            android:label="@string/title_activity_chat"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.juniormargalho.whatsapp.activity.MainActivity" />
+        </activity>
         <activity
             android:name=".activity.ConfiguracoesActivity"
-            android:parentActivityName=".activity.MainActivity"/>
-
-        <activity
-            android:name=".activity.CadastroActivity" />
-
-        <activity
-            android:name=".activity.MainActivity" />
-
+            android:parentActivityName=".activity.MainActivity" />
+        <activity android:name=".activity.CadastroActivity" />
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

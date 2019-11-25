@@ -18,5 +18,6 @@
     <string name="alert_title_permissao_negada">Permissões Negadas</string>
     <string name="alert_message_permissao_negada">Para utilizar o app é necessário aceitar as permissões!</string>
     <string name="alert_confirmar_permissao_negada">Confirmar</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>
