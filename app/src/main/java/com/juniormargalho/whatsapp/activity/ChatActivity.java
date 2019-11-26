@@ -11,9 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
 import com.juniormargalho.whatsapp.R;
+import com.juniormargalho.whatsapp.config.ConfiguracaoFirebase;
+import com.juniormargalho.whatsapp.helper.Base64Custom;
+import com.juniormargalho.whatsapp.helper.UsuarioFirebase;
+import com.juniormargalho.whatsapp.model.Mensagem;
 import com.juniormargalho.whatsapp.model.Usuario;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -23,6 +30,9 @@ public class ChatActivity extends AppCompatActivity {
     private TextView textViewNome;
     private CircleImageView circleImageViewFoto;
     private Usuario usuarioDestinatario;
+    private EditText editMensagem;
+    private String idUsuarioRemetente;
+    private String idUsuarioDestinatario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,10 @@ public class ChatActivity extends AppCompatActivity {
         //configurações iniciais
         textViewNome = findViewById(R.id.textViewNomeChat);
         circleImageViewFoto = findViewById(R.id.circleImageFotoChat);
+        editMensagem = findViewById(R.id.editMensagem);
+
+        //recuperar dados do usuario remetente
+        idUsuarioRemetente = UsuarioFirebase.getIdentificadorUsuario();
 
         //recuperar dados do usuario destinatario
         Bundle bundle = getIntent().getExtras();
@@ -54,8 +68,32 @@ public class ChatActivity extends AppCompatActivity {
             }else {
                 circleImageViewFoto.setImageResource(R.drawable.padrao);
             }
+            idUsuarioDestinatario = Base64Custom.codificarBase64(usuarioDestinatario.getEmail());
+        }
+    }
+
+    public void enviarMensagem(View view){
+        String textoMensagem = editMensagem.getText().toString();
+
+        if(!textoMensagem.isEmpty()){
+            Mensagem mensagem = new Mensagem();
+            mensagem.setIdUsuario(idUsuarioRemetente);
+            mensagem.setMensagem(textoMensagem);
+
+            //Salvar mensagem para o remetente
+            salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
+
+        }else {
+            Toast.makeText(ChatActivity.this, "Digite uma mensagem para enviar!", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void salvarMensagem(String idRemetente, String idDestinatario, Mensagem msg){
+        DatabaseReference database = ConfiguracaoFirebase.getFirebaseDatabase();
+        DatabaseReference mensagemRef = database.child("mensagens");
+        mensagemRef.child(idRemetente).child(idDestinatario).push().setValue(msg); //push() cria um identficador unico no firebase
+        editMensagem.setText("");
     }
 
 }
