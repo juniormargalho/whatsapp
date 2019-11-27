@@ -9,6 +9,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.widget.EditText;
@@ -17,11 +19,15 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.juniormargalho.whatsapp.R;
+import com.juniormargalho.whatsapp.adapter.MensagensAdapter;
 import com.juniormargalho.whatsapp.config.ConfiguracaoFirebase;
 import com.juniormargalho.whatsapp.helper.Base64Custom;
 import com.juniormargalho.whatsapp.helper.UsuarioFirebase;
 import com.juniormargalho.whatsapp.model.Mensagem;
 import com.juniormargalho.whatsapp.model.Usuario;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,6 +39,9 @@ public class ChatActivity extends AppCompatActivity {
     private EditText editMensagem;
     private String idUsuarioRemetente;
     private String idUsuarioDestinatario;
+    private RecyclerView recyclerMensagens;
+    private MensagensAdapter adapter;
+    private List<Mensagem> mensagens = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
         textViewNome = findViewById(R.id.textViewNomeChat);
         circleImageViewFoto = findViewById(R.id.circleImageFotoChat);
         editMensagem = findViewById(R.id.editMensagem);
+        recyclerMensagens = findViewById(R.id.recyclerMensagens);
 
         //recuperar dados do usuario remetente
         idUsuarioRemetente = UsuarioFirebase.getIdentificadorUsuario();
@@ -70,6 +80,15 @@ public class ChatActivity extends AppCompatActivity {
             }
             idUsuarioDestinatario = Base64Custom.codificarBase64(usuarioDestinatario.getEmail());
         }
+
+        //configuração adapter
+        adapter = new MensagensAdapter(mensagens, getApplicationContext());
+
+        //configuração recyclerview
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerMensagens.setLayoutManager(layoutManager);
+        recyclerMensagens.setHasFixedSize(true);
+        recyclerMensagens.setAdapter(adapter);
     }
 
     public void enviarMensagem(View view){
