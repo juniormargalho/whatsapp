@@ -64,8 +64,7 @@ public class ContatosFragment extends Fragment {
         recyclerViewListaContatos.setAdapter(adapter);
 
         //configurar evento de clique no recyclerview
-        recyclerViewListaContatos.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(),
+        recyclerViewListaContatos.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
                         recyclerViewListaContatos,
                         new RecyclerItemClickListener.OnItemClickListener() {
             @Override
