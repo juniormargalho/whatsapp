@@ -1,5 +1,6 @@
 package com.juniormargalho.whatsapp.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,6 +28,7 @@ import com.juniormargalho.whatsapp.helper.RecyclerItemClickListener;
 import com.juniormargalho.whatsapp.helper.UsuarioFirebase;
 import com.juniormargalho.whatsapp.model.Usuario;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class GrupoActivity extends AppCompatActivity {
     private DatabaseReference usuariosRef;
     private FirebaseUser usuarioAtual;
     private Toolbar toolbar;
+    private FloatingActionButton fabAvancarCadastro;
 
     public void atualizarMembrosToolbar(){
 
@@ -56,14 +59,6 @@ public class GrupoActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.title_toolbar_novo_grupo));
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //configuracoes iniciais
@@ -71,6 +66,7 @@ public class GrupoActivity extends AppCompatActivity {
         recyclerMembros = findViewById(R.id.recyclerMembros);
         usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios");
         usuarioAtual = UsuarioFirebase.getUsuarioAtual();
+        fabAvancarCadastro = findViewById(R.id.fabAvancarCadastro);
 
         //adapter
         contatosAdapter = new ContatosAdapter(listaMembros, getApplicationContext());
@@ -146,6 +142,16 @@ public class GrupoActivity extends AppCompatActivity {
 
                     }
                 }));
+
+        //configuracao floating action button
+        fabAvancarCadastro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(GrupoActivity.this, CadastroGrupoActivity.class);
+                i.putExtra("membros", (Serializable) listaMembrosSelecionados);
+                startActivity(i);
+            }
+        });
 
     }
 

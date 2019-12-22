@@ -22,5 +22,6 @@
     <string name="novo_grupo">Novo Grupo</string>
     <string name="title_activity_grupo">GrupoActivity</string>
     <string name="title_toolbar_novo_grupo">Novo Grupo</string>
+    <string name="title_activity_cadastro_grupo">CadastroGrupoActivity</string>
 
 </resources>
