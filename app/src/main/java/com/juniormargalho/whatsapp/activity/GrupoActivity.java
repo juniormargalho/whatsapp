@@ -58,7 +58,6 @@ public class GrupoActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.title_toolbar_novo_grupo));
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //configuracoes iniciais
