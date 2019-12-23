@@ -146,7 +146,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 if(imagem != null){
                     circleImageViewPerfil.setImageBitmap(imagem);
 
-                    //Recuperar dados daa imagem para o firebase
+                    //Recuperar dados da imagem para o firebase
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     imagem.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
                     byte[] dadosImagem = byteArrayOutputStream.toByteArray();
@@ -156,7 +156,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                             .child("imagens")
                             .child("perfil")
                             .child(identificadorUsuario + ".jpeg");
-                    final UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
+                    UploadTask uploadTask = imagemRef.putBytes(dadosImagem);
 
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
