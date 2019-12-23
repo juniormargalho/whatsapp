@@ -134,12 +134,10 @@ public class GrupoActivity extends AppCompatActivity {
 
                     @Override
                     public void onLongItemClick(View view, int position) {
-
                     }
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     }
                 }));
 
