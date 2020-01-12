@@ -228,33 +228,54 @@ public class ChatActivity extends AppCompatActivity {
         String textoMensagem = editMensagem.getText().toString();
 
         if(!textoMensagem.isEmpty()){
-            Mensagem mensagem = new Mensagem();
-            mensagem.setIdUsuario(idUsuarioRemetente);
-            mensagem.setMensagem(textoMensagem);
 
-            //Salvar mensagem para o remetente
-            salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
+            if(usuarioDestinatario != null){
+                Mensagem mensagem = new Mensagem();
+                mensagem.setIdUsuario(idUsuarioRemetente);
+                mensagem.setMensagem(textoMensagem);
 
-            //Salvar mensagem para o destinatario
-            salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+                //Salvar mensagem para o remetente
+                salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
 
-            //salvar conversa
-            salvarConversa(mensagem);
+                //Salvar mensagem para o destinatario
+                salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
 
+                //salvar conversa
+                salvarConversa(mensagem, false);
+            }else {
 
+                for(Usuario membro: grupo.getMembros()){
+                    String idRemetenteGrupo = Base64Custom.codificarBase64(membro.getEmail());
+                    String idUsuarioLogadoGrupo = UsuarioFirebase.getIdentificadorUsuario();
+                    Mensagem mensagem = new Mensagem();
+                    mensagem.setIdUsuario(idUsuarioLogadoGrupo);
+                    mensagem.setMensagem(textoMensagem);
+
+                    //salvar mensagem para o membro
+                    salvarMensagem(idRemetenteGrupo, idUsuarioDestinatario, mensagem);
+
+                    //salvar conversa
+                    salvarConversa(mensagem, true);
+                }
+            }
         }else {
             Toast.makeText(ChatActivity.this, "Digite uma mensagem para enviar!", Toast.LENGTH_LONG).show();
         }
-
     }
 
-    private void salvarConversa(Mensagem msg){
+    private void salvarConversa(Mensagem msg, boolean isGroup){
         Conversa conversaRemetente = new Conversa();
         conversaRemetente.setIdRemetente(idUsuarioRemetente);
         conversaRemetente.setIdDestinatario(idUsuarioDestinatario);
         conversaRemetente.setUltimaMensagem(msg.getMensagem());
-        conversaRemetente.setUsuarioExibicao(usuarioDestinatario);
 
+        if(isGroup){
+            conversaRemetente.setIsGroup("true");
+            conversaRemetente.setGrupo(grupo);
+        }else {
+            conversaRemetente.setUsuarioExibicao(usuarioDestinatario);
+            conversaRemetente.setIsGroup("false");
+        }
         conversaRemetente.salvar();
     }
 
