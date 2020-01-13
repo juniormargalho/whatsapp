@@ -2,10 +2,20 @@ package com.juniormargalho.whatsapp.model;
 
 public class Mensagem {
     private String idUsuario;
+    private String nome;
     private String mensagem;
     private String imagem;
 
     public Mensagem() {
+        this.setNome("");
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getIdUsuario() {
