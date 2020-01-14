@@ -23,12 +23,15 @@ import com.juniormargalho.whatsapp.R;
 import com.juniormargalho.whatsapp.activity.ChatActivity;
 import com.juniormargalho.whatsapp.activity.GrupoActivity;
 import com.juniormargalho.whatsapp.adapter.ContatosAdapter;
+import com.juniormargalho.whatsapp.adapter.ConversasAdapter;
 import com.juniormargalho.whatsapp.config.ConfiguracaoFirebase;
 import com.juniormargalho.whatsapp.helper.RecyclerItemClickListener;
 import com.juniormargalho.whatsapp.helper.UsuarioFirebase;
+import com.juniormargalho.whatsapp.model.Conversa;
 import com.juniormargalho.whatsapp.model.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,7 +72,10 @@ public class ContatosFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Usuario usuarioSelecionado = listaContatos.get(position);
+
+                List<Usuario> listaUsuariosAtualizada = adapter.getContatos();
+
+                Usuario usuarioSelecionado = listaUsuariosAtualizada.get(position);
                 boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
 
                 if(cabecalho){
@@ -132,6 +138,26 @@ public class ContatosFragment extends Fragment {
 
             }
         });
+    }
+
+    public void pesquisarContatos(String texto){
+        List<Usuario> listaContatosBusca = new ArrayList<>();
+
+        for(Usuario usuario : listaContatos){
+            String nome = usuario.getNome().toLowerCase();
+            if(nome.contains(texto)){
+                listaContatosBusca.add(usuario);
+            }
+        }
+        adapter = new ContatosAdapter(listaContatosBusca, getActivity());
+        recyclerViewListaContatos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void recarregarContatos(){
+        adapter = new ContatosAdapter(listaContatos, getActivity());
+        recyclerViewListaContatos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 }
