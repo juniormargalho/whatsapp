@@ -98,11 +98,7 @@ public class ContatosFragment extends Fragment {
 
             }
         }));
-        Usuario itemGrupo = new Usuario();
-        itemGrupo.setNome(getString(R.string.novo_grupo));
-        itemGrupo.setEmail("");
-        listaContatos.add(itemGrupo);
-
+        adicionarMenuNovoGrupo();
         return view;
     }
 
@@ -122,6 +118,7 @@ public class ContatosFragment extends Fragment {
         valueEventListenerContatos = usuariosRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                limparListaContatos();
                 for(DataSnapshot dados:dataSnapshot.getChildren()){
                     Usuario usuario = dados.getValue(Usuario.class);
                     String emailUsuarioAtual = usuarioAtual.getEmail();
@@ -138,6 +135,18 @@ public class ContatosFragment extends Fragment {
 
             }
         });
+    }
+
+    public void limparListaContatos(){
+        listaContatos.clear();
+        adicionarMenuNovoGrupo();
+    }
+
+    public void adicionarMenuNovoGrupo(){
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome(getString(R.string.novo_grupo));
+        itemGrupo.setEmail("");
+        listaContatos.add(itemGrupo);
     }
 
     public void pesquisarContatos(String texto){
